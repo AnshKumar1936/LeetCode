@@ -1,26 +1,32 @@
-public List<String> uncommonFromSentences(String s1, String s2) {
-        // Concatenate both sentences with a space
-        String s = s1 + " " + s2;
-        
-        // Create a map to store the word counts
-        Map<String, Integer> wordCount = new HashMap<>();
-        
-        // Split the combined string into words
-        String[] words = s.split(" ");
-        
-        // Count the occurrences of each word
-        for (String word : words) {
-            wordCount.put(word, wordCount.getOrDefault(word, 0) + 1);
+class Solution {
+    public String[] uncommonFromSentences(String s1, String s2) {
+        Map<String, Integer> wordFreq1 = new HashMap<>();
+        Map<String, Integer> wordFreq2 = new HashMap<>();
+        String sen1Words[] = s1.split(" ");
+        String sen2Words[] = s2.split(" ");
+        for(var word : sen1Words){
+            wordFreq1.put(word, wordFreq1.getOrDefault(word, 0)+1);
         }
+        for(var word : sen2Words){
+            wordFreq2.put(word, wordFreq2.getOrDefault(word, 0)+1);
+        }
+        List<String> uncommons = new ArrayList<>();
         
-        // Create a list to store the uncommon words (those with a count of 1)
-        List<String> result = new ArrayList<>();
-        
-        for (Map.Entry<String, Integer> entry : wordCount.entrySet()) {
-            if (entry.getValue() == 1) {
-                result.add(entry.getKey());
+        for(var entry : wordFreq1.entrySet()){
+            String word = entry.getKey();
+            int wordFreq = entry.getValue();
+            if(wordFreq == 1 && !wordFreq2.containsKey(word)){
+                 uncommons.add(word);
             }
         }
-        
-        return result;
+       
+        for(var entry : wordFreq2.entrySet()){
+            String word = entry.getKey();
+            int wordFreq = entry.getValue();
+            if(wordFreq == 1 && !wordFreq1.containsKey(word)){
+                 uncommons.add(word);
+            }
+        }
+        return uncommons.stream().toArray(String[]::new);
     }
+}
